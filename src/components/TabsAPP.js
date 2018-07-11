@@ -1,34 +1,57 @@
 import React, { Component, Fragment } from 'react'
-import { Image, StyleSheet } from 'react-native';
-import {Tabs, Tab, TabHeading, Icon} from 'native-base'
-import Home from './Home'
-
+import { Image, ScrollView, StyleSheet } from 'react-native';
+import {Tabs, Tab, Text, View, TabHeading, Icon} from 'native-base'
+import { Fonts } from '../utils/Fonts'
 export default class TabsAPP extends Component {
     render(){
         return (
-            <Tabs>
-            <Tab heading={<TabHeading style={styles.tabHeading} ><Icon type="FontAwesome" name="home" /></TabHeading>}>
-              <Home blogList={this.state.blogList}/>
-            </Tab>
-            <Tab heading={<TabHeading style={styles.tabHeading} ><Icon type="FontAwesome" name="bell-o" /></TabHeading>}>
-              {/* <Notification /> */}
-            </Tab>
-            <Tab heading={<TabHeading style={styles.tabHeading} ><Icon type="FontAwesome" name="envelope-o" /></TabHeading>}>
-              {/* <Messages messages={messages}/> */}
-            </Tab>
-          </Tabs>
+          <ScrollView>
+            <Tabs tabBarUnderlineStyle={{borderBottomWidth:2}}>
+               
+                <Tab 
+                    tabStyle={styles.TabStyle}
+                    textStyle={styles.TextStyle}
+                    activeTabStyle={styles.TabStyle}
+                    activeTextStyle={styles.TextStyle}
+                    heading={this.props.t2Header}>
+                {this.props.t2Content}
+                </Tab>
+                <Tab 
+                    tabStyle={styles.TabStyle}
+                    textStyle={styles.TextStyle}
+                    activeTabStyle={styles.TabStyle}
+                    activeTextStyle={styles.TextStyle}
+                    heading={this.props.t1Header}>
+                        {this.props.t1Content}
+                </Tab>
+                <Tab 
+                    tabStyle={styles.TabStyle}
+                    textStyle={styles.TextStyle}
+                    activeTabStyle={styles.TabStyle}
+                    activeTextStyle={styles.TextStyle}
+                    heading={this.props.t3Header} >
+                <View>
+                    <Text>Monster Location</Text>
+                </View>
+                </Tab>
+        </Tabs>
+      </ScrollView>
         )
     }
 }
 
 const styles = StyleSheet.create({
-    tabHeading: {
-      backgroundColor: "#7159C1",
-    },
-    header: { 
-      backgroundColor: "#7159C1",
-    },
-    container: {
-      flex: 1,
-    }
+  Content: {
+      height: 100,
+      backgroundColor: '#fff'
+  },
+
+  TabStyle: {
+      backgroundColor: '#fff',
+  },
+
+  TextStyle: {
+      fontFamily: Fonts.Markazi,
+      color: '#000'
+  }
 })

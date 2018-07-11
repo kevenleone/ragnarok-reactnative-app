@@ -1,8 +1,8 @@
 import React, { Fragment, Component } from 'react';
-import { Container, Header, Left, Right, Body, Title, Button, Icon, View, Fab, List, ListItem, Thumbnail, Text, Badge, Content, Tab, Tabs, TabHeading, Card, CardItem } from 'native-base';
-import { Platform,Image, StyleSheet, ScrollView } from 'react-native';
+import { Container, Header, Left, Right, Body, Title, Icon, View, Fab, List, ListItem, Thumbnail, Text, Badge, Content, Tab, Tabs, TabHeading, Card, CardItem } from 'native-base';
+import { Platform,Image, Button, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 
-export default class Home extends Component {
+export default class MonsterList extends Component {
 
     render(){
         return (
@@ -10,6 +10,11 @@ export default class Home extends Component {
             <Content contentContainerStyle={styles.container}>
                 {
                 this.props.MonsterList.map(monster => (
+
+                <TouchableOpacity nome="Kevinho" key={monster.id} onPress={() => this.props.navigation.navigate('MonsterInfo', {
+                    monster: monster,
+                    nome: 'josefino'
+                })}  >
                 <View key={monster.id} style={[styles.monsterView, {backgroundColor: monster.background}]}>
                     <Image 
                         style={styles.monsterAvatar} 
@@ -20,6 +25,8 @@ export default class Home extends Component {
                         <Text style={styles.monsterRace}>{monster.race}</Text>
                     </View>
                 </View>
+                </TouchableOpacity>
+                
                 ))
                 }
             </Content>
