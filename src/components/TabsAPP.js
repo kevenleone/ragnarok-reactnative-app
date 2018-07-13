@@ -7,15 +7,6 @@ export default class TabsAPP extends Component {
         return (
           <ScrollView>
             <Tabs tabBarUnderlineStyle={{borderBottomWidth:2}}>
-               
-                <Tab 
-                    tabStyle={styles.TabStyle}
-                    textStyle={styles.TextStyle}
-                    activeTabStyle={styles.TabStyle}
-                    activeTextStyle={styles.TextStyle}
-                    heading={this.props.t2Header}>
-                {this.props.t2Content}
-                </Tab>
                 <Tab 
                     tabStyle={styles.TabStyle}
                     textStyle={styles.TextStyle}
@@ -29,11 +20,20 @@ export default class TabsAPP extends Component {
                     textStyle={styles.TextStyle}
                     activeTabStyle={styles.TabStyle}
                     activeTextStyle={styles.TextStyle}
-                    heading={this.props.t3Header} >
-                <View>
-                    <Text>Monster Location</Text>
-                </View>
+                    heading={this.props.t2Header}>
+                {this.props.t2Content}
                 </Tab>
+                <Tab 
+                    tabStyle={styles.TabStyle}
+                    textStyle={styles.TextStyle}
+                    activeTabStyle={styles.TabStyle}
+                    activeTextStyle={styles.TextStyle}
+                    heading={this.props.t3Header} >
+                    {this.props.t3Content}
+                </Tab>
+               
+              
+              
         </Tabs>
       </ScrollView>
         )

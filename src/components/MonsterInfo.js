@@ -2,19 +2,46 @@ import React, {Component} from 'react'
 import { View, StyleSheet, Image } from 'react-native'
 import { Container, List, ListItem, Body, Button, Header, Left, Right, Icon, Text, Content, Thumbnail } from 'native-base';
 
+import LocationList from './LocationList'
 import Badge from './BadgeItem'
-import ItemList from './ItemList'
+import DropList from './DropList'
 import HeaderAPP from './HeaderAPP'
 import TabsAPP from './TabsAPP'
 import MonsterStats from './MonsterStats'
 import { Fonts } from '../utils/Fonts'
 
 export default class MonsterInfo extends Component {
+    state = {
+        itens : [],
+        monsterDetail: [],
+        monsterSkill: [],
+        monsterHomeLocation: [],
+        monsterInformation:[]
+    }
 
+    getItemDetail = async() => {
+        const { navigation } = this.props;
+        const monsterProps = navigation.getParam('monster')
+        const monsterRequest = await fetch(`http://192.168.0.112:3000/monster/details/${navigation.getParam('monsterId')}`)
+        const monsterResponse = await monsterRequest.json()
+        this.setState(
+            {
+                itens: monsterResponse.drops, 
+                monsterInformation: monsterProps,
+                monsterDetail: monsterResponse.monsterDetail[0],
+                monsterSkill: monsterResponse.monsterSkill,
+                monsterHomeLocation: monsterResponse.monsterHome 
+            }
+        )
+    }
+
+    async componentDidMount(){
+        this.getItemDetail()
+    }
+    
     static navigationOptions = ({navigation}) => {
         return {
-            header: null,
-            title: 'Dark Lord',
+            title: navigation.getParam('monsterName'),
             headerStyle: {
                 backgroundColor: '#7159C1',
             },
@@ -27,58 +54,29 @@ export default class MonsterInfo extends Component {
     render(){
         const { navigation } = this.props
 
-        const itens = [
-            {
-                id: 1,
-                item: "Flor de Valhalla",
-                itemUrl: 'http://file5.ratemyserver.net/items/small/7510.gif'
-            },{
-                id: 1000,
-                item: "Poeira Estelar",
-                itemUrl: 'http://file5.ratemyserver.net/items/small/1000.gif'
-            },{
-                id: 501,
-                item: "Poção Vermelha",
-                itemUrl: 'http://file5.ratemyserver.net/items/small/501.gif'
-            },{
-                id: 502,
-                item: "Poção Amarela",
-                itemUrl: 'http://file5.ratemyserver.net/items/small/502.gif'
-            },{
-                id: 552,
-                item: "Poção Amarela",
-                itemUrl: 'http://file5.ratemyserver.net/items/small/552.gif'
-            },{
-                id: 577,
-                item: "Poção Amarela",
-                itemUrl: 'http://file5.ratemyserver.net/items/small/577.gif'
-            },{
-                id: 553,
-                item: "Poção Amarela",
-                itemUrl: 'http://file5.ratemyserver.net/items/small/553.gif'
-            },
-            
-        ]
+        const MonsterHome = () => (
+           <LocationList monsterLocation={this.state.monsterHomeLocation} />
+        )
 
         const MonsterDrop = () => (
             <Content>
-                <ItemList itens={itens}/>
+                <DropList itens={this.state.itens}/>
             </Content>
         )
         
         const MonsterDetail = () => (
             <View>
                 <View style={styles.informationView}>
-                    <MonsterStats question="Level" answer="99" />
-                    <MonsterStats question="HP" answer="28549300" />
-                    <MonsterStats question="EXP" answer="2854900" />
-                    <MonsterStats question="ATK" answer="5560~9980" />
-                    <MonsterStats question="DEF" answer="25" />
-                    <MonsterStats question="MDEF" answer="42" />
-                    <MonsterStats question="DEX" answer="220" />
-                    <MonsterStats question="AGI" answer="25" />
-                    <MonsterStats question="VIT" answer="30" />
-                    <MonsterStats question="LUK" answer="210" />
+                    <MonsterStats question="Level" answer={this.state.monsterDetail.LV} />
+                    <MonsterStats question="HP" answer={this.state.monsterDetail.HP} />
+                    <MonsterStats question="EXP" answer={this.state.monsterDetail.EXP} />
+                    <MonsterStats question="ATK" answer={this.state.monsterDetail.ATK2 +'~'+this.state.monsterDetail.ATK1} />
+                    <MonsterStats question="DEF" answer={this.state.monsterDetail.DEF} />
+                    <MonsterStats question="MDEF" answer={this.state.monsterDetail.MDEF} />
+                    <MonsterStats question="DEX" answer={this.state.monsterDetail.DEX} />
+                    <MonsterStats question="AGI" answer={this.state.monsterDetail.AGI} />
+                    <MonsterStats question="VIT" answer={this.state.monsterDetail.VIT} />
+                    <MonsterStats question="LUK" answer={this.state.monsterDetail.LUK} />
                 </View>
 
                 {/* <View style={styles.mvpView}>
@@ -97,12 +95,9 @@ export default class MonsterInfo extends Component {
                    <View style={styles.QeA}>
                         <Text style={styles.informationQuestion}>Skills</Text>
                         <View style={{marginLeft: 10, flexWrap: 'wrap', marginLeft: 20, flexDirection: 'row'}}>
-                            <Badge color="#333" title="Teleporte" />
-                            <Badge color="#333" title="Sucking Blood" />
-                            <Badge color="#333" title="Sucking Blood" />
-                            <Badge color="#333" title="Sucking Blood" />
-                            <Badge color="#333" title="Sucking Blood" />
-                            <Badge color="#333" title="Shadow Attack" />
+                        {this.state.monsterSkill.map(skill => (
+                            <Text style={styles.skill} key={skill.SkillID}>{skill.skill}  </Text>
+                        ))}
                         </View>
                     </View>
                 </View>
@@ -114,13 +109,13 @@ export default class MonsterInfo extends Component {
             <Container>
                 <View style={styles.Container}>
                     <View style={styles.monsterView}>
-                        <Text style={styles.monsterName}>Valquíria Randgris</Text>
-                        <Badge color="#aac" title="Anjo" />
+                        <Text style={styles.monsterName}>{"#"+this.state.monsterInformation.id+' '+ this.state.monsterInformation.iName}</Text>
+                        <Badge color={this.state.monsterInformation.background} title={this.state.monsterInformation.race} />
                     </View>
                     <Right>
                         <Image
                             style={styles.monsterAvatar} 
-                            source={{uri: 'http://www.ragnadb.com.br/img/monstro/1751/valquiria-randgris.gif'}}
+                            source={{uri: this.state.monsterInformation.avatar}}
                         />
                     </Right>
                 </View>
@@ -129,7 +124,10 @@ export default class MonsterInfo extends Component {
                         t1Content={<MonsterDetail/>}
                         t2Header="Drops"
                         t2Content={<MonsterDrop/>}
-                        t3Header="Location" />
+                        t3Header="Location" 
+                        t3Content={<MonsterHome/>}
+                        />
+
                
       </Container>
         )
@@ -158,7 +156,7 @@ const styles = StyleSheet.create({
    },
 
    monsterName: {
-    fontSize: 25,
+    fontSize: 20,
     fontFamily: Fonts.Markazi
    },
 
@@ -183,6 +181,11 @@ const styles = StyleSheet.create({
 
   mvpImage: {
       marginLeft: 5
+  },
+
+  skill: {
+    fontFamily: Fonts.Markazi,
+    padding: 5,
   },
   
   mvpView: {

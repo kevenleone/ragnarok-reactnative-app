@@ -11,9 +11,10 @@ export default class MonsterList extends Component {
                 {
                 this.props.MonsterList.map(monster => (
 
-                <TouchableOpacity nome="Kevinho" key={monster.id} onPress={() => this.props.navigation.navigate('MonsterInfo', {
+                <TouchableOpacity key={monster.id} onPress={() => this.props.navigation.navigate('MonsterInfo', {
                     monster: monster,
-                    nome: 'josefino'
+                    monsterName: monster.iName,
+                    monsterId: monster.id
                 })}  >
                 <View key={monster.id} style={[styles.monsterView, {backgroundColor: monster.background}]}>
                     <Image 
