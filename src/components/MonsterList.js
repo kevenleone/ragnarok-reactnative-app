@@ -19,7 +19,7 @@ export default class MonsterList extends Component {
                 <View key={monster.id} style={[styles.monsterView, {backgroundColor: monster.background}]}>
                     <Image 
                         style={styles.monsterAvatar} 
-                        source={{uri: monster.avatar}}
+                        source={{uri: `https://raw.githubusercontent.com/kevenleone/ragnarok-db/master/assets/monster/${monster.id}.png`}}
                     />
                     <View style={styles.monsterInfo}> 
                         <Text style={styles.monsterTitle}>{monster.iName}</Text>

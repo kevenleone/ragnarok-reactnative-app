@@ -5,11 +5,11 @@ import { createStackNavigator } from 'react-navigation'
 import HomeScreen from './src/components/HomeScreen'
 import MonsterInfo from './src/components/MonsterInfo'
 import MonsterList from './src/components/MonsterList';
+import Loading from './src/components/Loading'
+import Login from './src/components/Login'
+import Map from './src/components/Map'
 
 export default class App extends Component<{}> {
-  static navigationOptions = {
-    header: null
-}
   render(){
     return (
         <StackNavigator/>
@@ -19,6 +19,8 @@ export default class App extends Component<{}> {
 
 const StackNavigator = createStackNavigator({
   Home: HomeScreen,
+  Map: Map,
+  Login: Login,
   MonsterInfo: MonsterInfo,
   MonsterList: MonsterList,
 })

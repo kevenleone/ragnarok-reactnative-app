@@ -2,9 +2,10 @@ import React, { Fragment, Component } from 'react';
 import { Container, Header, Left, Right, Body, Title, Icon, View, Fab, List, ListItem, Thumbnail, Text, Badge, Content, Tab, Tabs, TabHeading, Card, CardItem } from 'native-base';
 import { Image, StyleSheet, Button, AsyncStorage } from 'react-native';
 
-import axios from 'axios'
 import HeaderAPP from './HeaderAPP'
 import MonsterList from './MonsterList'
+import Loading from './Loading'
+import { API } from '../utils/API'
 
 export default class HomeScreen extends Component<{}> {
    static navigationOptions = {
@@ -12,21 +13,21 @@ export default class HomeScreen extends Component<{}> {
    }
 
   state = {
-    MonsterList : [
-    ]
+    MonsterList : [],
+    loaded: false
   }
 
   getMonsterList = async() => {
-    const monster = await fetch(`http://192.168.0.112:3000/monster`)
+    const monster = await fetch(`${API.IP}/monster`)
     const monster_data = await monster.json();
 
-    this.setState({MonsterList: monster_data})
+    this.setState({MonsterList: monster_data, loaded: true})
     await AsyncStorage.setItem('@ragnarok:monster', JSON.stringify(monster_data))
   }
 
   async getMonsterStorage(){
     const monster = JSON.parse(await AsyncStorage.getItem('@ragnarok:monster')) || []
-    this.setState({MonsterList: monster})
+    this.setState({MonsterList: monster, loaded: true})
   }
 
   async componentDidMount(){
@@ -41,17 +42,20 @@ export default class HomeScreen extends Component<{}> {
       <HeaderAPP navigation={this.props.navigation} HeaderTitle="Ragnarok Online" />
       <View style={styles.container}>
       <Tabs>
-        <Tab heading={<TabHeading style={styles.tabHeading} ><Icon type="FontAwesome" name="home" /></TabHeading>}>
+      <Tab heading={<TabHeading style={styles.tabHeading} ><Icon type="FontAwesome" name="home" /></TabHeading>}>
+        {
+          this.state.loaded ? 
           <MonsterList navigation={this.props.navigation} MonsterList={this.state.MonsterList}/>
+          : <Loading text="Loading Monsters..." />
+          
+        }
         </Tab>
         <Tab 
           heading={<TabHeading style={styles.tabHeading}>
           <Icon type="FontAwesome" name="bell-o"/>
           </TabHeading>
         }>
-        <View>
-            <Button title="Oiii" onPress={() => this.props.navigation.navigate('MonsterInfo')} />   
-        </View>
+       
         </Tab>
         <Tab 
           heading={<TabHeading style={styles.tabHeading}>

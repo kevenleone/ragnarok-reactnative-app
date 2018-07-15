@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import { ScrollView, StyleSheet, Image } from 'react-native';
+import { ScrollView, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { Container, Right, Header, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body } from 'native-base';
 
 import { Fonts } from '../utils/Fonts'
 
 export default class LocationList extends Component {
     render(){
+        const { navigation } = this.props
         return (
         <Container style={styles.containerLocation}>
             <Content >
@@ -19,11 +20,15 @@ export default class LocationList extends Component {
                                 </Body>
                             </Left>
                         </CardItem>
-                        <CardItem >
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Map', {
+                            map: monsterHome
+                        })}>
+                        <CardItem>
                             <Image 
                             source={{uri: `http://www.ragnadb.com.br/img/maps/${monsterHome.map}.gif`}} 
                             style={styles.map }/>
                         </CardItem>
+                        </TouchableOpacity>
                         <CardItem>
                             <Body>
                                 <Text style={styles.spawnLegend} note>

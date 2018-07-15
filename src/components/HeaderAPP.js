@@ -6,14 +6,9 @@ const logo_url = 'https://avatars0.githubusercontent.com/u/28929274?s=200&v=4';
 
 export default class HeaderAPP extends Component {
     render(){
-
         return (
         <Header androidStatusBarColor="#573ea8" style={styles.header} hasTabs>
             <Left>
-                <Button iconLeft transparent light >
-                    <Icon name="arrow-back"></Icon>
-                    <Text> Back </Text>
-                </Button>
             </Left>
             <Body>
                 <Title> {this.props.HeaderTitle} </Title>

@@ -7,7 +7,7 @@ export default class BadgeItem extends Component {
 
     render(){
         return (
-                <Badge style={{marginBottom: 10, backgroundColor: this.props.color }}  >
+                <Badge style={{marginBottom: 10, color:'#000', backgroundColor: this.props.color }}  >
                     <Text style={styles.SkillFont}>{this.props.title}</Text>
                 </Badge>
         )

@@ -1,7 +1,8 @@
 {
   "name": "RagnarokDB",
-  "version": "0.0.1",
+  "version": "1.0",
   "private": true,
+  "author": "Keven Leone dos Santos",
   "rnpm": {
     "assets": [
       "./assets/fonts"

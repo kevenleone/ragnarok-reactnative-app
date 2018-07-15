@@ -4,11 +4,13 @@ import { Container, List, ListItem, Body, Button, Header, Left, Right, Icon, Tex
 
 import LocationList from './LocationList'
 import Badge from './BadgeItem'
-import DropList from './DropList'
 import HeaderAPP from './HeaderAPP'
 import TabsAPP from './TabsAPP'
 import MonsterStats from './MonsterStats'
 import { Fonts } from '../utils/Fonts'
+import { API } from '../utils/API'
+import Loading from './Loading'
+import ItemList from './ItemList'
 
 export default class MonsterInfo extends Component {
     state = {
@@ -16,13 +18,14 @@ export default class MonsterInfo extends Component {
         monsterDetail: [],
         monsterSkill: [],
         monsterHomeLocation: [],
-        monsterInformation:[]
+        monsterInformation:[],
+        loaded: false
     }
 
     getItemDetail = async() => {
         const { navigation } = this.props;
         const monsterProps = navigation.getParam('monster')
-        const monsterRequest = await fetch(`http://192.168.0.112:3000/monster/details/${navigation.getParam('monsterId')}`)
+        const monsterRequest = await fetch(`${API.IP}/monster/details/${navigation.getParam('monsterId')}`)
         const monsterResponse = await monsterRequest.json()
         this.setState(
             {
@@ -30,7 +33,8 @@ export default class MonsterInfo extends Component {
                 monsterInformation: monsterProps,
                 monsterDetail: monsterResponse.monsterDetail[0],
                 monsterSkill: monsterResponse.monsterSkill,
-                monsterHomeLocation: monsterResponse.monsterHome 
+                monsterHomeLocation: monsterResponse.monsterHome,
+                loaded: true
             }
         )
     }
@@ -38,9 +42,13 @@ export default class MonsterInfo extends Component {
     async componentDidMount(){
         this.getItemDetail()
     }
+
+    componentWillMount(){
+    }
     
     static navigationOptions = ({navigation}) => {
         return {
+            header: null,
             title: navigation.getParam('monsterName'),
             headerStyle: {
                 backgroundColor: '#7159C1',
@@ -55,12 +63,18 @@ export default class MonsterInfo extends Component {
         const { navigation } = this.props
 
         const MonsterHome = () => (
-           <LocationList monsterLocation={this.state.monsterHomeLocation} />
+           <LocationList navigation={this.props.navigation} monsterLocation={this.state.monsterHomeLocation} />
         )
 
         const MonsterDrop = () => (
             <Content>
-                <DropList itens={this.state.itens}/>
+                {this.state.itens.map(item => (
+                    <ItemList 
+                    key={item.id} 
+                    title={item.item} 
+                    url={`http://file5.ratemyserver.net/items/small/${item.id}.gif`}
+                      />
+                ))}
             </Content>
         )
         
@@ -106,15 +120,25 @@ export default class MonsterInfo extends Component {
         )
       
         return (
-            <Container>
+            <Container style={{backgroundColor: '#fff'}}>
+            {
+                this.state.loaded ?
+                <Container style={{backgroundColor: '#fff'}}>
+                   <View style={{width: 100}}>
+                 <Button onPress={() => this.props.navigation.navigate('Home')} iconLeft transparent dark >
+                        <Icon name="arrow-back"></Icon>
+                        <Text style={styles.monsterId}>#{this.state.monsterInformation.id} </Text>
+                    </Button>
+                </View>
                 <View style={styles.Container}>
+                   
                     <View style={styles.monsterView}>
-                        <Text style={styles.monsterName}>{"#"+this.state.monsterInformation.id+' '+ this.state.monsterInformation.iName}</Text>
+                  
+                        <Text style={styles.monsterName}>{this.state.monsterInformation.iName}</Text>
                         <Badge color={this.state.monsterInformation.background} title={this.state.monsterInformation.race} />
                     </View>
                     <Right>
-                        <Image
-                            style={styles.monsterAvatar} 
+                        <Thumbnail large
                             source={{uri: this.state.monsterInformation.avatar}}
                         />
                     </Right>
@@ -127,9 +151,15 @@ export default class MonsterInfo extends Component {
                         t3Header="Location" 
                         t3Content={<MonsterHome/>}
                         />
+            </Container>
 
-               
-      </Container>
+            :
+
+            <Loading text="Loading Monster Info..." />
+
+            }
+              
+            </Container>
         )
     }
 }
@@ -137,6 +167,11 @@ export default class MonsterInfo extends Component {
 const styles = StyleSheet.create({
    TabStyle: {
        backgroundColor: '#fff'
+   },
+
+   monsterId: {
+        fontFamily: Fonts.Markazi,
+        fontSize: 18
    },
 
    TextStyle: {
@@ -157,18 +192,19 @@ const styles = StyleSheet.create({
 
    monsterName: {
     fontSize: 20,
-    fontFamily: Fonts.Markazi
+    fontFamily: Fonts.Markazi,
+    marginLeft: 5
    },
 
    monsterRace: {
     fontSize: 18,
-    fontFamily: Fonts.Markazi
-    
+    fontFamily: Fonts.Markazi,
+    color: '#000'
    },
 
    Container: {
     backgroundColor: "#FFF",
-    height: 130,
+    height: 110,
     padding: 5,
     flexDirection: 'row',
   },
