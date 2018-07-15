@@ -1,4 +1,4 @@
-# ragnarok-wiki-app
+# ragnarok-wiki-react-native-app
 
 ## About
 Project written using React Native based in Ragnarok Game, the app has :
