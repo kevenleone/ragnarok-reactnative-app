@@ -19,8 +19,8 @@ export default class App extends Component<{}> {
 
 const StackNavigator = createStackNavigator({
   Home: HomeScreen,
-  Map: Map,
   Login: Login,
+  Map: Map,
   MonsterInfo: MonsterInfo,
   MonsterList: MonsterList,
 })
