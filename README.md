@@ -14,3 +14,4 @@ Technologies:
 * React Native
 * Node JS
 
+This project is outdated, and i made a new project with best development pratices here -> https://github.com/kevenleone/ragnarok-react-native
